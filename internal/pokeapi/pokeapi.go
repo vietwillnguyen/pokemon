@@ -67,6 +67,7 @@ func GetLocations(urlOrOffset string) (LocationsAreasResponse, error) {
 	if err != nil {
 		return locationsAreasResponse, err
 	}
+	// Cache these values for later
 
 	return locationsAreasResponse, nil
 }
