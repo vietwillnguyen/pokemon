@@ -2,7 +2,6 @@
 package pokecache
 
 import (
-	"log"
 	"sync"
 	"time"
 )
@@ -24,7 +23,7 @@ func NewCache(inverval time.Duration) *Cache {
 		inverval: inverval,
 	}
 	go c.reapLoop()
-	log.Printf("NewCache: %v interval created\n", inverval)
+	// log.Printf("NewCache: %v interval created\n", inverval)
 	return &c
 }
 
@@ -37,11 +36,11 @@ func (c *Cache) reapLoop() {
 	ticker := time.NewTicker(c.inverval)
 	for {
 		<-ticker.C
-		log.Printf("reapLoop: %v interval passed.\n", c.inverval)
+		// log.Printf("reapLoop: %v interval passed.\n", c.inverval)
 		for key, cacheEntry := range c.entries {
 			// if expired, delete
 			if time.Now().After(cacheEntry.createdAt) {
-				log.Printf("reapLoop: deleted old entry at key: %v\n", key)
+				// log.Printf("reapLoop: deleted old entry at key: %v\n", key)
 				delete(c.entries, key)
 			}
 		}
@@ -49,7 +48,7 @@ func (c *Cache) reapLoop() {
 }
 
 func (c *Cache) Add(key string, val []byte) {
-	log.Printf("Add: key %v\n", key)
+	// log.Printf("Add: key %v\n", key, val)
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	c.entries[key] = CacheEntry{
@@ -59,7 +58,7 @@ func (c *Cache) Add(key string, val []byte) {
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
-	log.Printf("Get: key %v\n", key)
+	// log.Printf("Get: key %v\n", key)
 	// Lock the resource specifically to read only actions.
 	// This allows other reads to happen
 	// Once a mutex.Lock() is called, RLock() operations are blocked
