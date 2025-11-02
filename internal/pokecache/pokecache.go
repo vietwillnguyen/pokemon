@@ -27,11 +27,6 @@ func NewCache(inverval time.Duration) *Cache {
 	return &c
 }
 
-/*
-*
-- each time an inverval passes
-- remove any entries older than inverval.
-*/
 func (c *Cache) reapLoop() {
 	ticker := time.NewTicker(c.inverval)
 	for {
