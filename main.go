@@ -25,6 +25,51 @@ func cleanInput(input string) []string {
 	return words
 }
 
+func init() {
+	commandsMap = map[string]cliCommand{
+		"exit": {
+			name:        "exit",
+			description: "Exit the Pokedex",
+			callback:    commandExit,
+		},
+		"help": {
+			name:        "help",
+			description: "Display a help message",
+			callback:    commandHelp,
+		},
+		"map": {
+			name:        "map",
+			description: "Display the map, subsequent calls will display the next 20 locations",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Display the map, subsequent calls will display the previous 20 locations",
+			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore <area_name>",
+			description: "list of all the Pokémon in <area_name>",
+			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch <pokemon_name>",
+			description: "attempt catch on <pokemon_name>",
+			callback:    commandCatch,
+		},
+		"inspect": {
+			name:        "inspect <pokemon_name>",
+			description: "See more details on <pokemon_name>",
+			callback:    commandInspect,
+		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "list all caught pokemon",
+			callback:    commandPokedex,
+		},
+	}
+}
+
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	config := &replConfig{
