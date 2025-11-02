@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+var commandsMap map[string]cliCommand
+
 type cliCommand struct {
 	name        string
 	description string
@@ -15,14 +17,13 @@ type cliCommand struct {
 }
 
 type configStruct struct {
-	Next     string `json:"next"`
-	Previous string `json:"previous"`
+	pokeApiClient *pokeapi.Client
+	Next          string `json:"next"`
+	Previous      string `json:"previous"`
 }
 
-var commandsMap map[string]cliCommand
-
 func commandMap(config *configStruct) error {
-	LocationsAreasResponse, err := pokeapi.GetLocations(config.Next)
+	LocationsAreasResponse, err := config.pokeApiClient.GetLocationAreas(config.Next)
 	if err != nil {
 		return err
 	}
@@ -49,7 +50,7 @@ func commandMapb(config *configStruct) error {
 		return nil
 	}
 
-	LocationsAreasResponse, err := pokeapi.GetLocations(config.Previous)
+	LocationsAreasResponse, err := config.pokeApiClient.GetLocationAreas(config.Previous)
 	if err != nil {
 		return err
 	}
@@ -110,7 +111,9 @@ func cleanInput(input string) []string {
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-	config := &configStruct{}
+	config := &configStruct{
+		pokeApiClient: pokeapi.NewClient(),
+	}
 	for {
 		fmt.Print("Pokedex > ")
 		input, err := reader.ReadString('\n')

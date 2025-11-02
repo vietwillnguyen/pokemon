@@ -1,13 +1,29 @@
+// pokeapi.go
 package pokeapi
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
-	"strings"
+	"pokedexcli/internal/pokecache"
 	"time"
 )
+
+type Client struct {
+	cache  *pokecache.Cache
+	client *http.Client
+}
+
+func NewClient() *Client {
+	return &Client{
+		cache: pokecache.NewCache(1 * time.Minute),
+		client: &http.Client{
+			Timeout: 5 * time.Second,
+		},
+	}
+}
 
 type LocationsAreasResponse struct {
 	Count    int    `json:"count"`
@@ -19,22 +35,24 @@ type LocationsAreasResponse struct {
 	} `json:"results"`
 }
 
-func GetLocations(urlOrOffset string) (LocationsAreasResponse, error) {
-	client := &http.Client{
-		Timeout: 5 * time.Second,
+func (c *Client) GetLocationAreas(url string) (LocationsAreasResponse, error) {
+
+	// Build URL - if url is empty or a full URL, use it directly
+	// Otherwise, treat it as an offset number
+	if url == "" {
+		url = "https://pokeapi.co/api/v2/location-area?limit=20"
 	}
 
-	// Build URL - if urlOrOffset is empty or a full URL, use it directly
-	// Otherwise, treat it as an offset number
-	var url string
-	if urlOrOffset == "" {
-		url = "https://pokeapi.co/api/v2/location-area?limit=20"
-	} else if strings.HasPrefix(urlOrOffset, "http") {
-		// It's a full URL from the API response
-		url = urlOrOffset
-	} else {
-		// It's an offset number
-		url = fmt.Sprintf("https://pokeapi.co/api/v2/location?offset=%s&limit=20", urlOrOffset)
+	// Use cached value if it exists
+	cachedVal, cachedValExists := c.cache.Get(url)
+	if cachedValExists {
+		log.Printf("cached value exists, key: %s, val: %s", url, cachedVal)
+		var locationsAreasResponse LocationsAreasResponse
+		err := json.Unmarshal(cachedVal, &locationsAreasResponse)
+		if err != nil {
+			return LocationsAreasResponse{}, fmt.Errorf("unexpected error: %w", err)
+		}
+		return locationsAreasResponse, nil
 	}
 
 	// Get locations
@@ -44,7 +62,7 @@ func GetLocations(urlOrOffset string) (LocationsAreasResponse, error) {
 	}
 
 	// Send request
-	res, err := client.Do(req)
+	res, err := c.client.Do(req)
 	if err != nil {
 		return LocationsAreasResponse{}, err
 	}
@@ -67,7 +85,7 @@ func GetLocations(urlOrOffset string) (LocationsAreasResponse, error) {
 	if err != nil {
 		return locationsAreasResponse, err
 	}
-	// Cache these values for later
-
+	// Add value to cache for later
+	c.cache.Add(url, body)
 	return locationsAreasResponse, nil
 }
