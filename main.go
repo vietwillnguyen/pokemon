@@ -13,26 +13,26 @@ var commandsMap map[string]cliCommand
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*configStruct) error
+	callback    func(*replConfig) error
 }
 
-type configStruct struct {
+type replConfig struct {
 	pokeApiClient *pokeapi.Client
 	Next          string `json:"next"`
 	Previous      string `json:"previous"`
 }
 
-func commandMap(config *configStruct) error {
-	LocationsAreasResponse, err := config.pokeApiClient.GetLocationAreas(config.Next)
+func commandMap(config *replConfig) error {
+	locationAreasResponse, err := config.pokeApiClient.GetLocationAreas(config.Next)
 	if err != nil {
 		return err
 	}
-	for _, location := range LocationsAreasResponse.Results {
+	for _, location := range locationAreasResponse.Results {
 		fmt.Println(location.Name)
 	}
 	// Update config with next/previous URLs for pagination
-	config.Next = LocationsAreasResponse.Next
-	config.Previous = LocationsAreasResponse.Previous
+	config.Next = locationAreasResponse.Next
+	config.Previous = locationAreasResponse.Previous
 	return nil
 }
 
@@ -42,7 +42,7 @@ commandMapb is a command that displays the previous 20 locations on the map.
 // Scenarios:
 1. User is on the first page and tries to go back
 */
-func commandMapb(config *configStruct) error {
+func commandMapb(config *replConfig) error {
 
 	if config.Previous == "" {
 		fmt.Println("You're on the first page")
@@ -50,26 +50,26 @@ func commandMapb(config *configStruct) error {
 		return nil
 	}
 
-	LocationsAreasResponse, err := config.pokeApiClient.GetLocationAreas(config.Previous)
+	locationAreasResponse, err := config.pokeApiClient.GetLocationAreas(config.Previous)
 	if err != nil {
 		return err
 	}
-	for _, location := range LocationsAreasResponse.Results {
+	for _, location := range locationAreasResponse.Results {
 		fmt.Println(location.Name)
 	}
 	// Update config with next/previous URLs for pagination
-	config.Next = LocationsAreasResponse.Next
-	config.Previous = LocationsAreasResponse.Previous
+	config.Next = locationAreasResponse.Next
+	config.Previous = locationAreasResponse.Previous
 	return nil
 }
 
-func commandExit(config *configStruct) error {
+func commandExit(config *replConfig) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(config *configStruct) error {
+func commandHelp(config *replConfig) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	for _, cmd := range commandsMap {
@@ -111,7 +111,7 @@ func cleanInput(input string) []string {
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-	config := &configStruct{
+	config := &replConfig{
 		pokeApiClient: pokeapi.NewClient(),
 	}
 	for {

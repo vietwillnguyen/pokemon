@@ -49,7 +49,7 @@ func (c *Cache) reapLoop() {
 }
 
 func (c *Cache) Add(key string, val []byte) {
-	// log.Printf("Add: key %v, val: %v\n", key, val)
+	log.Printf("Add: key %v\n", key)
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	c.entries[key] = CacheEntry{

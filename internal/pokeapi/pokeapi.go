@@ -40,7 +40,7 @@ func (c *Client) GetLocationAreas(url string) (LocationsAreasResponse, error) {
 	// Build URL - if url is empty or a full URL, use it directly
 	// Otherwise, treat it as an offset number
 	if url == "" {
-		url = "https://pokeapi.co/api/v2/location-area?limit=20"
+		url = "https://pokeapi.co/api/v2/location-area?offset=0&limit=20"
 	}
 
 	// Use cached value if it exists
