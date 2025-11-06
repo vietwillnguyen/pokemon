@@ -33,7 +33,21 @@ make run
 Once the application is running, you'll see a REPL prompt:
 
 ```
-Pokedex > 
+╔═══════════════════════════════════════╗
+║                                       ║
+║   ██████╗  ██████╗ ██╗  ██╗███████╗   ║ 
+║   ██╔══██╗██╔═══██╗██║ ██╔╝██╔════╝   ║ 
+║   ██████╔╝██║   ██║█████╔╝ █████╗     ║ 
+║   ██╔═══╝ ██║   ██║██╔═██╗ ██╔══╝     ║ 
+║   ██║     ╚██████╔╝██║  ██╗███████╗   ║ 
+║   ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝   ║ 
+║                                       ║
+║         COMMAND LINE INTERFACE        ║
+║                                       ║
+╚═══════════════════════════════════════╝
+
+Type 'help' to see available commands    
+
 ```
 
 ### Available Commands
@@ -50,11 +64,91 @@ Pokedex >
 ### Examples
 
 ```
-Pokedex > map
-Pokedex > explore pallet-town
-Pokedex > catch pikachu
-Pokedex > inspect pikachu
-Pokedex > pokedex
+[0 caught] Pokedex > map
+
+═══ Locations ═══
+ 1. canalave-city-area        
+ 2. eterna-city-area
+ 3. pastoria-city-area        
+ 4. sunyshore-city-area       
+ 5. sinnoh-pokemon-league-area
+ 6. oreburgh-mine-1f
+ 7. oreburgh-mine-b1f
+ 8. valley-windworks-area     
+ 9. eterna-forest-area        
+10. fuego-ironworks-area      
+11. mt-coronet-1f-route-207   
+12. mt-coronet-2f
+13. mt-coronet-3f
+14. mt-coronet-exterior-snowfall
+15. mt-coronet-exterior-blizzard
+16. mt-coronet-4f
+17. mt-coronet-4f-small-room
+18. mt-coronet-5f
+19. mt-coronet-6f
+20. mt-coronet-1f-from-exterior
+
+Type 'map' for more locations
+
+[0 caught] Pokedex > explore mt-coronet-exterior-snowfall
+
+Exploring mt-coronet-exterior-snowfall...
+
+═══ Pokémon Found in mt-coronet-exterior-snowfall ═══
+ 1. clefairy
+ 2. golbat
+ 3. machoke
+ 4. noctowl
+ 5. loudred
+ 6. nosepass
+ 7. medicham
+ 8. lunatone
+ 9. solrock
+10. absol
+11. chingling
+12. bronzong
+13. snover
+14. abomasnow
+
+Use 'catch <pokemon_name>' to attempt a catch!
+
+[0 caught] Pokedex > catch abomasnow
+
+Throwing a Pokéball at abomasnow...
+Wobble... Wobble... Wobble... 
+✗ Oh no! abomasnow broke free!
+  Catch rate: 76.0% - Try again!
+
+[0 caught] Pokedex > catch abomasnow
+
+Throwing a Pokéball at abomasnow...
+Wobble... Wobble... Wobble...
+✓ Gotcha! abomasnow was caught!
+  Base Experience: 173
+
+[1 caught] Pokedex > inspect abomasnow
+
+
+╔═══════════════════════════════════╗
+║  ABOMASNOW                        ║
+╚═══════════════════════════════════╝
+
+Height: 22 decimetres
+Weight: 1355 hectograms
+
+Types:
+  • grass
+  • ice
+
+Stats:
+  hp:                 90 ███████░░░░░░░░░░░░░
+  attack:             92 ███████░░░░░░░░░░░░░
+  defense:            75 █████░░░░░░░░░░░░░░░
+  special attack:     92 ███████░░░░░░░░░░░░░
+  special defense:    85 ██████░░░░░░░░░░░░░░
+  speed:              60 ████░░░░░░░░░░░░░░░░
+
+[1 caught] Pokedex >
 ```
 
 ## Project Structure
