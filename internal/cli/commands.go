@@ -6,6 +6,7 @@ import (
 	"os"
 	"pokedexcli/internal/models"
 	"strings"
+	"time"
 )
 
 // Command represents a CLI command
@@ -156,21 +157,47 @@ func CommandCatch(config *models.ReplConfig, args []string) error {
 		return err
 	}
 
-	normalized := ((float32(pokemonResponse.BaseExperience) - 36.00) / (608.00 - 36.00))
+	// Higher base experience = harder to catch (inverted from before)
+	// Normalize between 0 (easiest) and 1 (hardest)
+	catchDifficulty := ((float32(pokemonResponse.BaseExperience) - 36.00) / (608.00 - 36.00))
 	roll := rand.Float32()
 
 	fmt.Printf("%sThrowing a Pokéball at %s...%s\n", colorYellow, pokemonName, colorReset)
-	fmt.Print(".")
-	fmt.Print(".")
-	fmt.Print(".\n")
 
-	if roll > normalized {
-		fmt.Printf("%s✓ %s was caught!%s\n", colorGreen, strings.Title(pokemonName), colorReset)
+	// Simulate 3 shakes with suspenseful pauses
+	shakes := []string{"Wobble...", "Wobble...", "Wobble..."}
+
+	for i, shake := range shakes {
+		time.Sleep(800 * time.Millisecond)
+		fmt.Print(shake)
+
+		// For dramatic effect, check if Pokemon breaks free after each shake
+		// Each shake has increasing chance to succeed
+		shakeThreshold := catchDifficulty * float32(3-i) / 3.0
+
+		if roll > shakeThreshold {
+			// Pokemon breaks free
+			if i < 2 { // Only break free on first two shakes for drama
+				time.Sleep(500 * time.Millisecond)
+				fmt.Print(" ")
+			}
+		} else {
+			// Will succeed
+			time.Sleep(500 * time.Millisecond)
+			fmt.Print(" ")
+		}
+	}
+	fmt.Println()
+
+	// Final result check: easier Pokemon = higher success chance
+	if roll > catchDifficulty {
+		fmt.Printf("%s✓ Gotcha! %s was caught!%s\n", colorGreen, pokemonName, colorReset)
 		fmt.Printf("  %sBase Experience: %d%s\n", colorGray, pokemonResponse.BaseExperience, colorReset)
 		config.Pokedex[pokemonResponse.Name] = models.Pokemon{Name: pokemonResponse.Name}
 	} else {
-		fmt.Printf("%s✗ %s escaped!%s\n", colorRed, strings.Title(pokemonName), colorReset)
-		fmt.Printf("  %sTry again! (Difficulty: %.1f%%)%s\n", colorGray, normalized*100, colorReset)
+		fmt.Printf("%s✗ Oh no! %s broke free!%s\n", colorRed, pokemonName, colorReset)
+		catchRate := (1.0 - catchDifficulty) * 100
+		fmt.Printf("  %sCatch rate: %.1f%% - Try again!%s\n", colorGray, catchRate, colorReset)
 	}
 	return nil
 }
@@ -273,7 +300,7 @@ func CommandPokedex(config *models.ReplConfig, args []string) error {
 
 	i := 1
 	for _, pokemon := range config.Pokedex {
-		fmt.Printf("%s%2d.%s %s\n", colorGray, i, colorReset, strings.Title(pokemon.Name))
+		fmt.Printf("%s%2d.%s %s\n", colorGray, i, colorReset, pokemon.Name)
 		i++
 	}
 
