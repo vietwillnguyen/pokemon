@@ -1,5 +1,22 @@
 # Pokedex CLI
 
+```
+╔═══════════════════════════════════════╗
+║                                       ║
+║   ██████╗  ██████╗ ██╗  ██╗███████╗   ║ 
+║   ██╔══██╗██╔═══██╗██║ ██╔╝██╔════╝   ║ 
+║   ██████╔╝██║   ██║█████╔╝ █████╗     ║ 
+║   ██╔═══╝ ██║   ██║██╔═██╗ ██╔══╝     ║ 
+║   ██║     ╚██████╔╝██║  ██╗███████╗   ║ 
+║   ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝   ║ 
+║                                       ║
+║         COMMAND LINE INTERFACE        ║
+║                                       ║
+╚═══════════════════════════════════════╝
+
+Type 'help' to see available commands    
+```
+
 A command-line interface for exploring the Pokemon world using the [PokeAPI](https://pokeapi.co/).
 
 ## Features
@@ -33,21 +50,7 @@ make run
 Once the application is running, you'll see a REPL prompt:
 
 ```
-╔═══════════════════════════════════════╗
-║                                       ║
-║   ██████╗  ██████╗ ██╗  ██╗███████╗   ║ 
-║   ██╔══██╗██╔═══██╗██║ ██╔╝██╔════╝   ║ 
-║   ██████╔╝██║   ██║█████╔╝ █████╗     ║ 
-║   ██╔═══╝ ██║   ██║██╔═██╗ ██╔══╝     ║ 
-║   ██║     ╚██████╔╝██║  ██╗███████╗   ║ 
-║   ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝   ║ 
-║                                       ║
-║         COMMAND LINE INTERFACE        ║
-║                                       ║
-╚═══════════════════════════════════════╝
-
-Type 'help' to see available commands    
-
+[0 caught] Pokedex > map
 ```
 
 ### Available Commands
